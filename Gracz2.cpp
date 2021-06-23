@@ -35,7 +35,7 @@ int tickLeftGracz2 = 0;
 int tickRightGracz2 = 0;
 
 Gracz2::Gracz2(float pozycja_x, float pozycja_y) : Aktor(pozycja_x, pozycja_y, 48, 96), m_Szybkosc(3.f),
-                                                   wartosc_ataku(10) {
+                                                   wartosc_ataku(10), prevHp(100) {
     SDL_Surface *ludzikRedStoi = IMG_Load(
             "../img/GraczNiebieski/nieb.bmp"); // <- png nie dzialalo https://discourse.libsdl.org/t/sdl2-image-fails-loading-libpng-on-latest-versions-when-cross-compiling/24494/10
     texNiebieski = SDL_CreateTextureFromSurface(g_Rys, ludzikRedStoi);
@@ -166,8 +166,8 @@ void Gracz2::Rysuj(float krok) {
             nowTexture = niebPrawo4;
             tickRightGracz2 = 0;
         }
-    } else if ((klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawisz == "prawy") or animacjaWalki1) {
-        if (klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawisz == "prawy") {
+    } else if ((klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawiszGr2 == 2) or animacjaWalki1) {
+        if (klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawiszGr2 == 2) {
             counter = 0;
         }
         if (counter < 6) {
@@ -182,13 +182,12 @@ void Gracz2::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = niebreceprawo1;
         } else {
-            //counter =0;
             nowTexture = texNiebieski;
             animacjaWalki1 = false;
         }
 
-    } else if ((klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawisz == "lewy") or animacjaWalki2) {
-        if (klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawisz == "lewy") {
+    } else if ((klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawiszGr2 == 1) or animacjaWalki2) {
+        if (klawisze[SDL_SCANCODE_C] and ostatniWcisnietyKlawiszGr2 == 1) {
             counter = 0;
         }
         if (counter < 6) {
@@ -203,14 +202,13 @@ void Gracz2::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = niebrecelewo1;
         } else {
-            //counter =0;
             nowTexture = texNiebieski;
             animacjaWalki2 = false;
         }
 
 
-    } else if ((klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawisz == "prawy") or animacjaWalki3) {
-        if (klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawisz == "prawy") {
+    } else if ((klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawiszGr2 == 2) or animacjaWalki3) {
+        if (klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawiszGr2 == 2) {
             counter = 0;
         }
 
@@ -226,14 +224,13 @@ void Gracz2::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = niebnogiprawo1;
         } else {
-            //counter =0;
             nowTexture = texNiebieski;
             animacjaWalki3 = false;
         }
 
 
-    } else if ((klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawisz == "lewy") or animacjaWalki4) {
-        if (klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawisz == "lewy") {
+    } else if ((klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawiszGr2 == 1) or animacjaWalki4) {
+        if (klawisze[SDL_SCANCODE_V] and ostatniWcisnietyKlawiszGr2 == 1) {
             counter = 0;
         }
         if (counter < 6) {
@@ -248,7 +245,6 @@ void Gracz2::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = niebnogilewo1;
         } else {
-            //counter =0;
             nowTexture = texNiebieski;
             animacjaWalki4 = false;
         }
@@ -265,7 +261,7 @@ void Gracz2::Rysuj(float krok) {
 }
 
 void Gracz2::Aktualizuj() {
-    const float Predkosc = 1.0;
+    ++counterForFireBlock;
     const auto klawisze = SDL_GetKeyboardState(NULL);
 
     x_gracza2 = m_Pozycja_X;
@@ -273,11 +269,11 @@ void Gracz2::Aktualizuj() {
 
     if (klawisze[SDL_SCANCODE_A]) {
         Impuls(-m_Szybkosc, 0);
-        ostatniWcisnietyKlawisz = "lewy";
+        ostatniWcisnietyKlawiszGr2 = 1;
     }
     if (klawisze[SDL_SCANCODE_D]) {
         Impuls(+m_Szybkosc, 0);
-        ostatniWcisnietyKlawisz = "prawy";
+        ostatniWcisnietyKlawiszGr2 = 2;
     }
     Impuls(0, 0.3f);
     Tarcie_X(0.4f);
@@ -285,8 +281,19 @@ void Gracz2::Aktualizuj() {
         Tarcie_X(0.3f);
     }
 
-    if (sprawdzCzyJestesWBlokuPalacym(m_Pozycja_X, m_Pozycja_Y)) {
-        hp_gr2 -= 0.5;
+
+    if ( prevHp != hp_gr2){
+        if(ostatniWcisnietyKlawiszGr1 == 2){
+            Impuls(10, -2.f);
+        } else if(ostatniWcisnietyKlawiszGr1 == 1){
+            Impuls(-10, -2.f);
+        }
+
+    }
+    prevHp = hp_gr2;
+
+    if (sprawdzCzyJestesWBlokuPalacym(m_Pozycja_X, m_Pozycja_Y) and  counterForFireBlock%20 == 0) {
+        hp_gr2 -= 4;
     }
 
     if (czyJestWBlokuDodadkowym(m_Pozycja_X, m_Pozycja_Y) && blokDodadkowyState) {
@@ -307,23 +314,25 @@ void Gracz2::Zdarzenie(SDL_Event &zdarzenie) {
 
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_C and
             Przeciwnik_po_Prawej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 2) and
-            ostatniWcisnietyKlawisz == "prawy") {
+            ostatniWcisnietyKlawiszGr2 == 2 ) {
             hp_gr1 -= wartosc_ataku;
         }
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_C and
             Przeciwnik_po_Lewej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 2) and
-            ostatniWcisnietyKlawisz == "lewy") {
+            ostatniWcisnietyKlawiszGr2 == 1) {
             hp_gr1 -= wartosc_ataku;
         }
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_V and
             Przeciwnik_po_Prawej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 2) and
-            ostatniWcisnietyKlawisz == "prawy") {
+            ostatniWcisnietyKlawiszGr2 == 2) {
             hp_gr1 -= wartosc_ataku;
         }
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_V and
             Przeciwnik_po_Lewej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 2) and
-            ostatniWcisnietyKlawisz == "lewy") {
+            ostatniWcisnietyKlawiszGr2 == 1) {
             hp_gr1 -= wartosc_ataku;
         }
+
+        //do dopisania (attack1counter + 15 < counter or attack1counter > counter) licznik ktory pozwala zaatakowac np raz na 1sec
     }
 }

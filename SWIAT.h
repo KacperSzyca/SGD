@@ -71,7 +71,6 @@ public:
 
     PROSTOKAT<int> Prostokat_Wyrowany_Do_Blokow(PROSTOKAT<float> prostokat);
 
-
     void Laduj(vector<const char *> rzedy);
 };
 

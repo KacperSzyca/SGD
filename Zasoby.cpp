@@ -20,6 +20,8 @@ float x_gracza2;
 float y_gracza2;
 float hp_gr1;
 float hp_gr2;
+int ostatniWcisnietyKlawiszGr1;
+int ostatniWcisnietyKlawiszGr2;
 
 void Laduj_Zasoby() {
     blokipalace_x_min = 2000;

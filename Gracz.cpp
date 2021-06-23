@@ -35,10 +35,11 @@ bool blockChanged = false;
 int tickLeft = 0;
 int tickRight = 0;
 
+
 //https://lazyfoo.net/tutorials/SDL/14_animated_sprites_and_vsync/index.php
 //https://www.youtube.com/watch?v=RqvpkZ7I1aU
 Gracz::Gracz(float pozycja_x, float pozycja_y) : Aktor(pozycja_x, pozycja_y, 48, 96), m_Szybkosc(3.f),
-                                                 wartosc_ataku(10) {
+                                                 wartosc_ataku(10),prevHp(100) {
     SDL_Surface *ludzikRedStoi = IMG_Load(
             "../img/czerw.bmp"); // <- png nie dzialalo https://discourse.libsdl.org/t/sdl2-image-fails-loading-libpng-on-latest-versions-when-cross-compiling/24494/10
     texGracz1 = SDL_CreateTextureFromSurface(g_Rys, ludzikRedStoi);
@@ -138,7 +139,7 @@ void Gracz::Rysuj(float krok) {
         SDL_Rect lifeTexture = {x_life += 20, 40, 10, 10};
         SDL_RenderCopy(g_Rys, pasekZyciaGr1, NULL, &lifeTexture);
     }
-    //printf("%d  ds \n", (int)counter);
+    //printf("%d  ds \n", counter);
     auto prostokat = Jako_SDL_Rect();
     SDL_Texture *nowTexture;
     const auto klawisze = SDL_GetKeyboardState(NULL);
@@ -170,8 +171,8 @@ void Gracz::Rysuj(float krok) {
             nowTexture = czerwPrawo4;
             tickRight = 0;
         }
-    } else if ((klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawisz == "prawy") or animacjaWalki1) {
-        if (klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawisz == "prawy") {
+    } else if ((klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawiszGr1 == 2) or animacjaWalki1) {
+        if (klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawiszGr1 == 2) {
             counter = 0;
         }
         if (counter < 6) {
@@ -186,13 +187,12 @@ void Gracz::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = czerwreceprawo1;
         } else {
-            //counter =0;
             nowTexture = texGracz1;
             animacjaWalki1 = false;
         }
 
-    } else if ((klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawisz == "lewy") or animacjaWalki2) {
-        if (klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawisz == "lewy") {
+    } else if ((klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawiszGr1 == 1) or animacjaWalki2) {
+        if (klawisze[SDL_SCANCODE_K] and ostatniWcisnietyKlawiszGr1 == 1) {
             counter = 0;
         }
         if (counter < 6) {
@@ -207,13 +207,12 @@ void Gracz::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = czerwrecelewo1;
         } else {
-            //counter =0;
             nowTexture = texGracz1;
             animacjaWalki2 = false;
         }
 
-    } else if ((klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawisz == "prawy") or animacjaWalki3) {
-        if (klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawisz == "prawy") {
+    } else if ((klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawiszGr1 == 2) or animacjaWalki3) {
+        if (klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawiszGr1 == 2) {
             counter = 0;
         }
 
@@ -229,14 +228,13 @@ void Gracz::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = czerwnogiprawo1;
         } else {
-            //counter =0;
             nowTexture = texGracz1;
             animacjaWalki3 = false;
         }
 
 
-    } else if ((klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawisz == "lewy") or animacjaWalki4) {
-        if (klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawisz == "lewy") {
+    } else if ((klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawiszGr1 == 1) or animacjaWalki4) {
+        if (klawisze[SDL_SCANCODE_L] and ostatniWcisnietyKlawiszGr1 == 1) {
             counter = 0;
         }
         if (counter < 6) {
@@ -251,7 +249,6 @@ void Gracz::Rysuj(float krok) {
         } else if (counter >= 24 and counter < 30) {
             nowTexture = czerwnogilewo1;
         } else {
-            //counter =0;
             nowTexture = texGracz1;
             animacjaWalki4 = false;
         }
@@ -266,21 +263,19 @@ void Gracz::Rysuj(float krok) {
 
 
 void Gracz::Aktualizuj() {
-
+    ++counterForFireBlock;
     const auto klawisze = SDL_GetKeyboardState(NULL);
-    // SDL_FreeSurface(surfaceMessage);
-    //SDL_DestroyTexture(Message);
 
     x_gracza1 = m_Pozycja_X;
     y_gracza1 = m_Pozycja_Y;
 
     if (klawisze[SDL_SCANCODE_LEFT]) {
         Impuls(-m_Szybkosc, 0);
-        ostatniWcisnietyKlawisz = "lewy";
+        ostatniWcisnietyKlawiszGr1 = 1;
     }
     if (klawisze[SDL_SCANCODE_RIGHT]) {
         Impuls(+m_Szybkosc, 0);
-        ostatniWcisnietyKlawisz = "prawy";
+        ostatniWcisnietyKlawiszGr1 = 2;
     }
     //grawitacja
     Impuls(0, 0.3f);
@@ -289,9 +284,18 @@ void Gracz::Aktualizuj() {
     if (m_Pozycja_Y < 300) {
         Tarcie_X(0.3f);
     }
+    if ( prevHp != hp_gr1){
+        if(ostatniWcisnietyKlawiszGr2 == 2){
+            Impuls(10, -2.f);
+        } else if(ostatniWcisnietyKlawiszGr2 == 1){
+            Impuls(-10, -2.f);
+        }
 
-    if (sprawdzCzyJestesWBlokuPalacym(m_Pozycja_X, m_Pozycja_Y)) {
-        hp_gr1 -= 0.5;
+    }
+    prevHp = hp_gr1;
+
+    if (sprawdzCzyJestesWBlokuPalacym(m_Pozycja_X, m_Pozycja_Y) and counterForFireBlock%20 == 0) {
+        hp_gr1 -= 4;
     }
 
     if (czyJestWBlokuDodadkowym(m_Pozycja_X, m_Pozycja_Y) && blokDodadkowyState) {
@@ -303,6 +307,8 @@ void Gracz::Aktualizuj() {
     if (hp_gr1 <= 0) {
         blueWin = true;
     }
+
+
 }
 
 void Gracz::Zdarzenie(SDL_Event &zdarzenie) {
@@ -314,22 +320,22 @@ void Gracz::Zdarzenie(SDL_Event &zdarzenie) {
         }
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_K and
             Przeciwnik_po_Prawej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 1) and
-            ostatniWcisnietyKlawisz == "prawy") {
+                ostatniWcisnietyKlawiszGr1 == 2) {
             hp_gr2 -= wartosc_ataku;
         }
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_K and
             Przeciwnik_po_Lewej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 1) and
-            ostatniWcisnietyKlawisz == "lewy") {
+                ostatniWcisnietyKlawiszGr1 == 1) {
             hp_gr2 -= wartosc_ataku;
         }
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_L and
             Przeciwnik_po_Prawej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 1) and
-            ostatniWcisnietyKlawisz == "prawy") {
+            ostatniWcisnietyKlawiszGr1 == 2) {
             hp_gr2 -= wartosc_ataku;
         }
         if (zdarzenie.key.keysym.scancode == SDL_SCANCODE_L and
             Przeciwnik_po_Lewej(m_Pozycja_X, m_Pozycja_Y, m_Szerokosc, m_wysokosc, 1) and
-            ostatniWcisnietyKlawisz == "lewy") {
+            ostatniWcisnietyKlawiszGr1 == 1) {
             hp_gr2 -= wartosc_ataku;
         }
 

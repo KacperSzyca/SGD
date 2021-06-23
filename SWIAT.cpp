@@ -108,7 +108,6 @@ void SWIAT::Kolizje_z_Blokami(Aktor *aktor) {
                         hitbox_bloku.Lewa(), hitbox_bloku.Gorna() + 1,
                         aktor->m_Predkosc_X, hitbox_bloku.W - 2,
                 };
-                //Debug_Prostokat(sciana);
                 if (hitbox_aktora.Koliduje_z(sciana)) {
                     aktor->m_Predkosc_X *= -aktor->m_Sprezystosc;
                     aktor->m_Pozycja_X = hitbox_bloku.Lewa() - hitbox_aktora.S;
@@ -120,7 +119,6 @@ void SWIAT::Kolizje_z_Blokami(Aktor *aktor) {
                         hitbox_bloku.Prawa() + aktor->m_Predkosc_X, hitbox_bloku.Gorna() + 1,
                         -aktor->m_Predkosc_X, hitbox_bloku.W - 2,
                 };
-                // Debug_Prostokat(sciana);
                 if (hitbox_aktora.Koliduje_z(sciana)) {
                     aktor->m_Predkosc_X *= -aktor->m_Sprezystosc;
                     aktor->m_Pozycja_X = hitbox_bloku.Prawa();
@@ -141,13 +139,11 @@ void SWIAT::Kolizje_z_Blokami(Aktor *aktor) {
                 continue;
             }
             auto hitbox_bloku = Blok_Jako_Prostokat(x, y);
-            // Debug_Prostokat(hitbox_bloku);
             if (aktor->m_Predkosc_Y > +0.001 and not Jest_Solidny(Blok(x, y - 1))) {
                 auto sciana = PROSTOKAT<float>{
                         hitbox_bloku.Lewa() + 1, hitbox_bloku.Gorna(),
                         hitbox_bloku.S - 2, aktor->m_Predkosc_Y,
                 };
-                //Debug_Prostokat(sciana);
                 if (hitbox_aktora.Koliduje_z(sciana)) {
                     aktor->m_Predkosc_Y *= -aktor->m_Sprezystosc;
                     aktor->m_Pozycja_Y = hitbox_bloku.Gorna() - hitbox_aktora.W;
@@ -159,7 +155,6 @@ void SWIAT::Kolizje_z_Blokami(Aktor *aktor) {
                         hitbox_bloku.Lewa() + 1, hitbox_bloku.Dolna() + aktor->m_Predkosc_Y,
                         hitbox_bloku.S - 2, -aktor->m_Predkosc_Y,
                 };
-                // Debug_Prostokat(sciana);
                 if (hitbox_aktora.Koliduje_z(sciana)) {
                     aktor->m_Predkosc_Y *= -aktor->m_Sprezystosc;
                     aktor->m_Pozycja_Y = hitbox_bloku.Dolna();

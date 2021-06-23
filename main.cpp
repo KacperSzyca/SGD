@@ -8,6 +8,8 @@ void nowa_gra();
 
 void kolejna_gra();
 
+void close();
+
 using namespace std;
 
 //https://www.youtube.com/watch?v=1VulZJw353I
@@ -142,7 +144,7 @@ void kolejna_gra() {
             }
             if (klawisze[SDL_SCANCODE_Q]) {
                 graczNieWybral = false;
-                SDL_Quit();
+                close();
             }
             if (klawisze[SDL_SCANCODE_R]) {
                 graczNieWybral = false;
@@ -152,6 +154,16 @@ void kolejna_gra() {
     }
 
 }
+
+void close(){
+    SDL_DestroyRenderer(g_Rys);
+    SDL_DestroyTexture(rock);
+
+
+    SDL_Quit();
+}
+
+
 
 
 

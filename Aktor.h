@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include "Prostokat.h"
-#include <string>
 
 class SWIAT;
 

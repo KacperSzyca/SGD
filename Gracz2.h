@@ -6,12 +6,15 @@
 class Gracz2 : public Aktor {
 private:
     int wartosc_ataku;
-    std::string ostatniWcisnietyKlawisz;
     int counter;
     bool animacjaWalki1;
     bool animacjaWalki2;
     bool animacjaWalki3;
     bool animacjaWalki4;
+    int prevHp;
+    int counterForFireBlock;
+    int attack1counter;
+    int attack2counter;
 public:
     float m_Szybkosc;
 

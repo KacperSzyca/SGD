@@ -1,9 +1,10 @@
 #ifndef ZASOBY_HPP
 #define ZASOBY_HPP
-
+#include <string>
 #include <SDL.h>
 #include "Prostokat.h"
 #include <SDL_image.h>
+
 
 extern SDL_Window *g_Okno;
 extern SDL_Renderer *g_Rys;
@@ -21,6 +22,10 @@ extern float x_gracza1;
 extern float y_gracza1;
 extern float x_gracza2;
 extern float y_gracza2;
+
+//1 <- lewo , 2 <- prawo
+extern int ostatniWcisnietyKlawiszGr1;
+extern int ostatniWcisnietyKlawiszGr2;
 
 extern float hp_gr1;
 extern float hp_gr2;

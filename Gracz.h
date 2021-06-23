@@ -6,15 +6,15 @@
 class Gracz : public Aktor {
 private:
     int wartosc_ataku;
-    std::string ostatniWcisnietyKlawisz;
     int counter;
     bool animacjaWalki1;
     bool animacjaWalki2;
     bool animacjaWalki3;
     bool animacjaWalki4;
+    int prevHp;
+    int counterForFireBlock;
 public:
     float m_Szybkosc;
-
 
     Gracz(float pozycja_x, float pozycja_y);
 
