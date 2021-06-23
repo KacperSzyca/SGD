@@ -34,7 +34,7 @@ void nowa_gra() {
             "M                  M                  M",
             "M                                     M",
             "M            M           M            M",
-            "M                         M           M",
+            "M                                     M",
             "M     M                         M     M",
             "M                                     M",
             "MM                                   MM",
@@ -45,11 +45,11 @@ void nowa_gra() {
             "MM                                   MM",
             "M                                     M",
             "M                                     M",
-            "MMMMMM                           MMMMMM",
+            "MMM                                 MMM",
             "M                                     M",
             "M        M                   M        M",
             "M       MMMMMMMMMMMMMMMMMMMMMMM       M",
-            "M    MMMMMMMMMMMMMMMMMMMMMMMMMMMMM    M",
+            "M     MMMMMMMMMMMMMMMMMMMMMMMMMMM     M",
             "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
     });
 
@@ -120,10 +120,13 @@ void nowa_gra() {
             SDL_FreeSurface(redwinsurface);
             SDL_Rect rect = {0, 0, 1240, 895};
             SDL_RenderCopy(g_Rys, redewin, NULL, &rect);
+
         }
         SDL_RenderPresent(g_Rys);
     }
-    kolejna_gra();
+    if(wydarzenie.type != SDL_QUIT) {
+        kolejna_gra();
+    }
 }
 
 void kolejna_gra() {
