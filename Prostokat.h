@@ -1,35 +1,35 @@
 #ifndef SDGPROJECT_PROSTOKAT_H
 #define SDGPROJECT_PROSTOKAT_H
 
-template <typename T>
-struct PROSTOKAT{
-    T X,Y,S,W; // X , Y , SZEROKOSC , WYSOKOSC
+template<typename T>
+struct PROSTOKAT {
+    T X, Y, S, W; // X , Y , SZEROKOSC , WYSOKOSC
 
-    inline T Lewa(){
+    inline T Lewa() {
         return X;
     }
 
-    inline T Prawa(){
-        return X+S;
+    inline T Prawa() {
+        return X + S;
     }
 
-    inline T Gorna(){
+    inline T Gorna() {
         return Y;
     }
 
-    inline T Dolna(){
-        return Y+W;
+    inline T Dolna() {
+        return Y + W;
     }
 
-    inline bool Koliduje_z( PROSTOKAT<T> inny){
+    inline bool Koliduje_z(PROSTOKAT<T> inny) {
         return Lewa() < inny.Prawa() and inny.Lewa() < Prawa() and
-            Gorna() < inny.Dolna() and inny.Gorna() < Dolna();
+               Gorna() < inny.Dolna() and inny.Gorna() < Dolna();
     }
 
 
 };
 
-enum class SCIANA{
+enum class SCIANA {
     Prawa,
     Dolna,
     Lewa,

@@ -3,7 +3,7 @@
 
 #include "Aktor.h"
 
-class Gracz:public Aktor {
+class Gracz : public Aktor {
 private:
     int wartosc_ataku;
     std::string ostatniWcisnietyKlawisz;
@@ -17,10 +17,14 @@ public:
 
 
     Gracz(float pozycja_x, float pozycja_y);
-    virtual ~Gracz(){};
+
+    virtual ~Gracz() {};
+
     void Rysuj(float krok) override;
+
     void Aktualizuj() override;
-    void Zdarzenie(SDL_Event & zdarzenie) override;
+
+    void Zdarzenie(SDL_Event &zdarzenie) override;
 };
 
 

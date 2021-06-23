@@ -37,7 +37,8 @@ int tickRight = 0;
 
 //https://lazyfoo.net/tutorials/SDL/14_animated_sprites_and_vsync/index.php
 //https://www.youtube.com/watch?v=RqvpkZ7I1aU
-Gracz::Gracz(float pozycja_x, float pozycja_y) : Aktor(pozycja_x, pozycja_y, 48, 96), m_Szybkosc(3.f), wartosc_ataku(10) {
+Gracz::Gracz(float pozycja_x, float pozycja_y) : Aktor(pozycja_x, pozycja_y, 48, 96), m_Szybkosc(3.f),
+                                                 wartosc_ataku(10) {
     SDL_Surface *ludzikRedStoi = IMG_Load(
             "../img/czerw.bmp"); // <- png nie dzialalo https://discourse.libsdl.org/t/sdl2-image-fails-loading-libpng-on-latest-versions-when-cross-compiling/24494/10
     texGracz1 = SDL_CreateTextureFromSurface(g_Rys, ludzikRedStoi);
@@ -295,7 +296,7 @@ void Gracz::Aktualizuj() {
 
     if (czyJestWBlokuDodadkowym(m_Pozycja_X, m_Pozycja_Y) && blokDodadkowyState) {
         hp_gr1 += 50;
-        wartosc_ataku +=20;
+        wartosc_ataku += 20;
         blokDodadkowyState = false;
     }
 
